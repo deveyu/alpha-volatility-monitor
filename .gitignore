@@ -1,7 +1,7 @@
-.idea
-.venv
-.build
-.dist
+/.idea/
+.venv/
+
 *.lock
 *.spec
-
+/dist/
+/build/
