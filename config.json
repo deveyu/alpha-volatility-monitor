@@ -1,0 +1,6 @@
+{
+  "monitor_token_list": "MERL",
+  "per_allow_loss": 0.015,
+  "per_amount": 1040.0,
+  "request_interval": 3.0
+}
