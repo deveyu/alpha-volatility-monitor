@@ -1,6 +1,5 @@
 /.idea/
 .venv/
-
 *.lock
 *.spec
 /dist/
