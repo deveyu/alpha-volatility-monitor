@@ -6,6 +6,10 @@ import threading
 import tkinter as tk
 from tkinter.scrolledtext import ScrolledText
 from tkinter import messagebox
+import os
+
+def play_beep():
+    os.system('afplay /System/Library/Sounds/Glass.aiff')
 
 CONFIG_FILE = "config.json"
 
@@ -145,6 +149,8 @@ class TradeMonitorApp:
             self.log(f"[错误] {e}", "red")
             return
 
+        last_movement_time = time.time()  # ✅ 新增：记录上一次波动的时间
+
         while self.running:
             try:
                 params = {"symbol": f"{self.alpha_id}USDT"}
@@ -156,6 +162,7 @@ class TradeMonitorApp:
                     time.sleep(2)
                     continue
 
+                movement_detected = False  # ✅ 是否有显著波动
                 for i, trade in enumerate(data):
                     trade_id = trade['a']
                     price = float(trade['p'])
@@ -168,9 +175,11 @@ class TradeMonitorApp:
                     if delta > self.threshold_base:
                         tag = f"↑ {formatted_time}-{self.symbol}-{trade_id}-{price:.8f}-{qty:.2f} ({delta:+.5%})"
                         color = "blue"
+                        movement_detected = True
                     elif delta < -self.threshold_base:
                         tag = f"↓ {formatted_time}-{self.symbol}-{trade_id}-{price:.8f}-{qty:.2f} ({delta:+.5%})"
                         color = "orange"
+                        movement_detected = True
                     else:
                         tag = f"· {formatted_time}-{self.symbol}-{trade_id}-{price:.8f}-{qty:.2f} ({delta:+.5%})"
                         color = "black"
@@ -180,7 +189,17 @@ class TradeMonitorApp:
 
                     if i == len(data) - 1:
                         self.last_id = trade_id + 1
-                        self.log("-"*80, "grey")
+                        self.log("-" * 80, "grey")
+
+                # ✅ 如果本轮检测有显著波动，则更新时间
+                if movement_detected:
+                    last_movement_time = time.time()
+                else:
+                    # ✅ 超过10秒没有波动 -> 播放提示音
+                    if time.time() - last_movement_time > 10:
+                        play_beep()
+                        self.log("[提示] 市场平静超过 10 秒", "grey")
+                        last_movement_time = time.time()  # 重置计时
 
                 time.sleep(self.request_interval)
 

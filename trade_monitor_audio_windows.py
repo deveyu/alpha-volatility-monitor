@@ -7,6 +7,7 @@ import tkinter as tk
 from tkinter.scrolledtext import ScrolledText
 from tkinter import messagebox
 import winsound
+
 CONFIG_FILE = "config.json"
 
 # ================= 默认配置 =================
@@ -137,7 +138,7 @@ class TradeMonitorApp:
             token = monitor_tokens[0]
             self.symbol = f"{token['symbol']}USDT"
             self.alpha_id = token['alphaId']
-            self.log(f"距4x结束时间: {(datetime.now() - datetime.fromtimestamp(token['listingTime'] / 1000)).days} 天")
+            self.log(f"距4x结束时间: {30-(datetime.now() - datetime.fromtimestamp(token['listingTime'] / 1000)).days} 天")
             time.sleep(1)
             self.log(f"开始监控 {self.symbol} 聚合成交数据...\n")
 
@@ -170,11 +171,11 @@ class TradeMonitorApp:
 
                     if delta > self.threshold_base:
                         tag = f"↑ {formatted_time}-{self.symbol}-{trade_id}-{price:.8f}-{qty:.2f} ({delta:+.5%})"
-                        color = "green"
+                        color = "blue"
                         movement_detected = True
                     elif delta < -self.threshold_base:
                         tag = f"↓ {formatted_time}-{self.symbol}-{trade_id}-{price:.8f}-{qty:.2f} ({delta:+.5%})"
-                        color = "red"
+                        color = "orange"
                         movement_detected = True
                     else:
                         tag = f"· {formatted_time}-{self.symbol}-{trade_id}-{price:.8f}-{qty:.2f} ({delta:+.5%})"
@@ -194,7 +195,7 @@ class TradeMonitorApp:
                     # ✅ 超过10秒没有波动 -> 播放提示音
                     if time.time() - last_movement_time > 10:
                         winsound.Beep(880, 300)  # 播放 880Hz 声音 0.3秒
-                        self.log("[提示] 市场平静超过 10 秒", "blue")
+                        self.log("[提示] 市场平静超过 10 秒", "grey")
                         last_movement_time = time.time()  # 重置计时
 
                 time.sleep(self.request_interval)
