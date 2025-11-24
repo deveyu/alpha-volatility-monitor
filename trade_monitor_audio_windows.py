@@ -207,8 +207,8 @@ class TradeMonitorApp:
                 self.log(f"[错误] {e}", "red")
                 time.sleep(5)
 
-
-if __name__ == "__main__":
-    root = tk.Tk()
-    app = TradeMonitorApp(root)
-    root.mainloop()
+#
+# if __name__ == "__main__":
+#     root = tk.Tk()
+#     app = TradeMonitorApp(root)
+#     root.mainloop()

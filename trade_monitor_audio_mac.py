@@ -194,8 +194,8 @@ class TradeMonitorApp:
                 # ✅ 如果本轮检测有显著波动，则更新时间
                 if movement_detected:
                     last_movement_time = time.time()
-                else:
-                    # ✅ 超过10秒没有波动 -> 播放提示音
+                else: 
+                    # ✅ 超过10秒没有波动 -> 播放 提示音
                     if time.time() - last_movement_time > 10:
                         play_beep()
                         self.log("[提示] 市场平静超过 10 秒", "grey")

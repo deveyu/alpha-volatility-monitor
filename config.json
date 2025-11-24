@@ -1,5 +1,5 @@
 {
-  "monitor_token_list": "MERL",
+  "monitor_token_list": "AIO",
   "per_allow_loss": 0.015,
   "per_amount": 520.0,
   "request_interval": 3.0
